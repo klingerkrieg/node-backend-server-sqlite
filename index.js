@@ -17,12 +17,18 @@ const cors = require('cors');
 const bodyParser = require('body-parser')
 const app = express();
 const basicAuth = require('express-basic-auth');
+const fileUpload = require('express-fileupload');
  
 //autenticacao
 app.use(basicAuth({
     users: { admin: '123456' },
     challenge: true 
 }))
+
+// ativa uploads
+app.use(fileUpload({
+    createParentPath: true
+}));
 
 app.listen(3001, ()=>{
     console.log("running on 3001");
@@ -72,6 +78,12 @@ app.post('/users/', (req, res) => {
     let nome = req.body.nome;
     let preco = req.body.preco;
     let descricao = req.body.descricao;
+    let foto = "";
+
+    if(req.files){
+        foto = req.files.foto.name;
+        req.files.foto.mv("./uploads/"+ foto);
+    }
 
     (async () => {
         try {
@@ -80,7 +92,8 @@ app.post('/users/', (req, res) => {
             const resultadoCreate = Produto.create({
                 nome: nome,
                 preco: preco,
-                descricao: descricao
+                descricao: descricao,
+                foto: foto
             })
             
             res.send({ error: false, message: 'user has been added successfully.' });
@@ -97,14 +110,32 @@ app.put('/users/', (req, res) => {
     let nome = req.body.nome;
     let preco = req.body.preco;
     let descricao = req.body.descricao;
+    let foto = "";
 
+    if (id == null){
+        res.send({ error: true, message: "Id vazia" });
+    }
+
+    if(req.files){
+        foto = req.files.foto.name;
+        req.files.foto.mv("./uploads/"+ foto);
+    }
 
     (async () => {
         try{
             const produto = await Produto.findByPk(id);
-            produto.nome = nome;
-            produto.preco = preco;
-            produto.descricao = descricao;
+            if (nome != ""){
+                produto.nome = nome;
+            }
+            if (preco != ""){
+                produto.preco = preco;
+            }
+            if (descricao != ""){
+                produto.descricao = descricao;
+            }
+            if (foto != ""){
+                produto.foto = foto;
+            }
 
             const resultadoSave = await produto.save();
             res.send({ error: false, message: 'user has been saved successfully.' });
