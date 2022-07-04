@@ -49,7 +49,7 @@ app.get('/users', (req, res) => {
     (async () => {
         try{
             const produtos = await Produto.findAll();
-            console.log(produtos)
+            console.log("GET ALL:" + produtos.length );
             res.json({ error:false, data:produtos});
         } catch (error) {
             console.log(error);
@@ -65,6 +65,7 @@ app.get('/users/:id', (req, res) => {
     (async () => {
         try{
             const produto = await Produto.findByPk(id);
+            console.log("GET ONE:" + produto );
             res.json({ error:false, data:produto});
         } catch (error) {
             console.log(error);
@@ -80,6 +81,7 @@ app.post('/users/', (req, res) => {
     let descricao = req.body.descricao;
     let foto = "";
 
+    console.log(req.files);
     if(req.files){
         foto = req.files.foto.name;
         req.files.foto.mv("./uploads/"+ foto);
