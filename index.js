@@ -123,6 +123,7 @@ app.put('/users/', (req, res) => {
         res.send({ error: true, message: "Id vazia" });
     }
 
+    console.log(req.files);
     if(req.files){
         foto = req.files.foto.name;
         req.files.foto.mv("./uploads/"+ foto);
