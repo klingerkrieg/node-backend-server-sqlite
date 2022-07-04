@@ -29,6 +29,10 @@ app.use(basicAuth({
 app.use(fileUpload({
     createParentPath: true
 }));
+app.use('/uploads',express.static(__dirname+'/uploads'));
+
+
+
 
 app.listen(3001, ()=>{
     console.log("running on 3001");
@@ -57,6 +61,7 @@ app.get('/users', (req, res) => {
         }
     })()
 });
+
 
 
 //GET ONE
