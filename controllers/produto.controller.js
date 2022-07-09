@@ -1,10 +1,14 @@
+const db = require("../models");
+const Produto = db.produto;
+
 exports.allAccess = (req, res) => {
     res.status(200).send("Public Content.");
 };
-/*
+
 //GET ALL
 exports.getAll = (req, res) => {
     
+    //Exemplo com then
     try{
         const produtos = Produto.findAll()
         .then(produtos => {
@@ -23,6 +27,8 @@ exports.getAll = (req, res) => {
 //GET ONE
 exports.getOne = (req, res) => {
     let id = req.params.id;
+    
+    //Exemplo com await
     (async () => {
         try{
             const produto = await Produto.findByPk(id);
@@ -48,23 +54,23 @@ exports.create = (req, res) => {
         req.files.foto.mv("./uploads/"+ foto);
     }
 
-    (async () => {
-        try {
-            const resultado = db.sync();
-            
-            const resultadoCreate = Produto.create({
-                nome: nome,
-                preco: preco,
-                descricao: descricao,
-                foto: foto
-            })
-            
-            res.send({ error: false, message: 'data has been added successfully.' });
-        } catch (error) {
-            console.log(error);
-            res.send({ error: true, message: error });
-        }
-    })()
+    //Exemplo com then
+    try {
+        const resultadoCreate = Produto.create({
+            nome: nome,
+            preco: preco,
+            descricao: descricao,
+            foto: foto,
+            dono: req.userId,
+        }).then(() => 
+            res.send({ error: false, message: 'data has been added successfully.' }
+        ));
+        
+    } catch (error) {
+        console.log(error);
+        res.send({ error: true, message: error });
+    }
+    
 };
 
 //UPDATE
@@ -85,6 +91,7 @@ exports.update = (req, res) => {
         req.files.foto.mv("./uploads/"+ foto);
     }
 
+    //Exemplo com await
     (async () => {
         try{
             const produto = await Produto.findByPk(id);
@@ -113,6 +120,7 @@ exports.update = (req, res) => {
 //DELETE
 exports.delete = (req, res) => {
     let id = req.body.id;
+    //Exemplo com await
     (async () => {
         try{
             Produto.destroy({ where: { id: id }});
@@ -122,4 +130,4 @@ exports.delete = (req, res) => {
             res.send({ error: true, message: error });
         }
     })();
-};*/
+};

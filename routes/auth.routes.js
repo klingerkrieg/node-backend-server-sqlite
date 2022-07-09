@@ -17,4 +17,5 @@ module.exports = function(app) {
   );
 
   app.post("/login", controller.login);
+  app.get("/logout", controller.logout);
 };

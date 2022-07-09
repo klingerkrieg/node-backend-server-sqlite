@@ -28,7 +28,7 @@ exports.login = (req, res) => {
       })
       .then(user => {
         if (!user) {
-          return res.status(404).send({error:1, message: "User Not found." });
+          return res.status(404).send({error:1,accessToken: "", message: "User Not found." });
         }
         var passwordIsValid = bcrypt.compareSync(
           req.body.senha,
@@ -49,6 +49,17 @@ exports.login = (req, res) => {
         });
     })
     .catch(err => {
-        res.status(500).send({error:1, message: err.message });
+        res.status(500).send({error:1,accessToken: "", message: err.message });
+    });
+};
+
+
+exports.logout = (req, res) => {
+    //para deslogar tem que tirar o token do navegador
+    //ou adicionar o token em uma blocklist
+    //na pratica este metodo nao está fazendo nada
+    res.status(200).send({
+        error:0, 
+        accessToken: ""
     });
 };

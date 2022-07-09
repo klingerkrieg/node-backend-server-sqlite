@@ -11,9 +11,9 @@ module.exports = function(app) {
   });
 
   
-  app.get("/produtos",[authJwt.verifyToken],controller.allAccess);
-  /*app.get("/produtos/:id",[authJwt ],controller.getOne);
-  app.put("/produtos",[authJwt ], controller.update);
-  app.post("/produtos",[authJwt ],controller.create);
-  app.delete("/produtos",[authJwt ], controller.delete);*/
+  app.get("/produtos",[authJwt.verifyToken],controller.getAll);
+  app.get("/produtos/:id",[authJwt.verifyToken ],controller.getOne);
+  app.put("/produtos",[authJwt.verifyToken ], controller.update);
+  app.post("/produtos",[authJwt.verifyToken ],controller.create);
+  app.delete("/produtos",[authJwt.verifyToken ], controller.delete);
 };

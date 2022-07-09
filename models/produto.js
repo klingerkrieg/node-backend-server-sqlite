@@ -9,7 +9,7 @@ module.exports = (database, Sequelize) => {
         },
         nome: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
         },
         preco: {
             type: Sequelize.DOUBLE
@@ -17,7 +17,11 @@ module.exports = (database, Sequelize) => {
         descricao: Sequelize.STRING,
         foto: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
+        },
+        dono: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
         }
     });
     return Produto
