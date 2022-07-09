@@ -4,7 +4,7 @@ const Usuario = db.usuario;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
-exports.signup = (req, res) => {
+exports.registrar = (req, res) => {
   // Save User to Database
   Usuario.create({
         email: req.body.email,
@@ -19,38 +19,36 @@ exports.signup = (req, res) => {
 };
 
 
-exports.signin = (req, res) => {
+exports.login = (req, res) => {
     
     Usuario.findOne({
         where: {
-          email: req.body.email
+          email: req.body.email,
         }
       })
-    .then(user => {
+      .then(user => {
         if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+          return res.status(404).send({error:1, message: "User Not found." });
         }
         var passwordIsValid = bcrypt.compareSync(
-        req.body.senha,
-        user.senha
+          req.body.senha,
+          user.senha
         );
         if (!passwordIsValid) {
-        return res.status(401).send({
-            accessToken: null,
-            message: "Invalid Password!"
-        });
+            return res.status(404).send({error:0, success:0, message: "User Not found." });
         }
         var token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400 // 24 hours
+          expiresIn: 86400 // 24 hours
         });
         
         res.status(200).send({
+            error:0, 
             id: user.id,
             email: user.email,
             accessToken: token
         });
     })
     .catch(err => {
-        res.status(500).send({ message: err.message });
+        res.status(500).send({error:1, message: err.message });
     });
 };
