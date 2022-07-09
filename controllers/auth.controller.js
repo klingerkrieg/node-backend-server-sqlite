@@ -35,7 +35,7 @@ exports.login = (req, res) => {
           user.senha
         );
         if (!passwordIsValid) {
-            return res.status(404).send({error:0, success:0, message: "User Not found." });
+            return res.status(404).send({error:1,accessToken: "", message: "User Not found." });
         }
         var token = jwt.sign({ id: user.id }, config.secret, {
           expiresIn: 86400 // 24 hours
